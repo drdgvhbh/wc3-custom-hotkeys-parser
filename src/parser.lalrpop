@@ -1,0 +1,31 @@
+use crate::ast::{HotkeyOverride};
+
+grammar;
+
+pub HotkeyOverrides: Vec<HotkeyOverride> = {
+    <or:HotkeyOverride*> Comment* => or
+}
+
+pub HotkeyOverride: HotkeyOverride = {
+    Comment* <aid:AbilityId> <kv:KeyValue*> => HotkeyOverride{ ability_id: aid, overrides: kv }
+}
+
+pub AbilityId: String = {
+    <id:AbilityTag> => id[1..id.len()-1].to_string()
+}
+
+pub KeyValue: (String, String) = {
+    <kv:KV> => {
+        let v = kv.split("=").collect::<Vec<_>>();
+        (v[0].to_string(), v[1].trim().to_string())
+    }
+}
+
+
+match {
+    r"\[[a-zA-Z0-9]+\]" => AbilityTag,
+    r"[a-zA-Z]+=.*[\r\n?|\n]" => KV,
+    r"\r\n?|\n" => LineBreak,
+    r"/[/]+.*" => Comment
+} else {
+}

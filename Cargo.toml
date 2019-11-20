@@ -1,0 +1,18 @@
+[package]
+name = "wc3-custom-hotkeys-parser"
+version = "0.1.0"
+authors = ["Ryan Lee <drdgvhbh@gmail.com>"]
+license = "MIT/Apache-2.0"
+edition = "2018"
+repository = "https://github.com/drdgvhbh/wc3-custom-hotkeys-parser"
+
+[lib]
+crate-type = ["cdylib"]
+
+[build-dependencies]
+lalrpop = "0.17"
+
+[dependencies]
+regex = "0.2"
+lalrpop-util = "0.17"
+wasm-bindgen = "0.2.55"
