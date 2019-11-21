@@ -9,12 +9,6 @@ mod ast;
 mod parser;
 
 #[wasm_bindgen]
-pub struct HotkeyOverride {
-    ability_id: JsValue,
-    overrides: Vec<Vec<JsValue>>,
-}
-
-#[wasm_bindgen]
 pub fn parse_custom_hotkeys(custom_hotkeys: &str) -> Result<Vec<JsValue>, JsValue> {
     let p = parser::HotkeyOverridesParser::new();
     let result = p.parse(custom_hotkeys);
@@ -25,16 +19,7 @@ pub fn parse_custom_hotkeys(custom_hotkeys: &str) -> Result<Vec<JsValue>, JsValu
     Ok(result
         .unwrap()
         .into_iter()
-        .map(|ho| {
-            return HotkeyOverride {
-                ability_id: JsValue::from(ho.ability_id),
-                overrides: ho
-                    .overrides
-                    .into_iter()
-                    .map(|o| vec![JsValue::from(o.0), JsValue::from(o.1)])
-                    .collect::<Vec<_>>(),
-            };
-        })
+        .map(|ho| JsValue::from_serde(&ho).unwrap())
         .map(JsValue::from)
         .collect::<Vec<_>>())
 }
